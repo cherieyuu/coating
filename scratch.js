@@ -24,11 +24,33 @@ ScratchCard.prototype = {
 
   _scratch: function(e) {
     e.preventDefault();
-    const x = e.clientX + document.body.scrollLeft, y = e.clientY + document.body.scrollTop;
+    const endPoint = { x: e.clientX + document.body.scrollLeft, y: e.clientY + document.body.scrollTop }
+    if (!this.beginPoint) this.beginPoint = endPoint;
+    if (!this.middlePoint) this.middlePoint = endPoint;
+    // this._drawLine(this.beginPoint, endPoint);
+    // this.beginPoint = endPoint;
+    this._drawCurve(this.beginPoint, this.middlePoint, endPoint);
+    this.beginPoint = this.middlePoint;
+    this.middlePoint = endPoint;
+  },
+  
+  _drawLine: function(beginPoint, endPoint) {    
     with(this.ctx) {
       beginPath();
-      arc(x, y, 2, 0, Math.PI * 2);
-      fill();
+      moveTo(beginPoint.x, beginPoint.y);
+      lineTo(endPoint.x, endPoint.y);
+      stroke();
+      // closePath();
+    }
+  },
+
+  _drawCurve: function(beginPoint, controlPoint, endPoint) {
+    with(this.ctx) {
+      beginPath();
+      moveTo(beginPoint.x, beginPoint.y);
+      quadraticCurveTo(controlPoint.x, controlPoint.y, endPoint.x, endPoint.y);
+      stroke();
+      closePath();
     }
   }
 }
