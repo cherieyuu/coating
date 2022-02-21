@@ -40,7 +40,7 @@ ScratchCard.prototype = {
       moveTo(beginPoint.x, beginPoint.y);
       lineTo(endPoint.x, endPoint.y);
       stroke();
-      // closePath();
+      closePath();
     }
   },
 
