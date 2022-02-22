@@ -24,14 +24,13 @@ ScratchCard.prototype = {
 
   _scratch: function(e) {
     e.preventDefault();
-    const endPoint = { x: e.clientX + document.body.scrollLeft, y: e.clientY + document.body.scrollTop }
-    if (!this.beginPoint) this.beginPoint = endPoint;
-    if (!this.middlePoint) this.middlePoint = endPoint;
-    // this._drawLine(this.beginPoint, endPoint);
-    // this.beginPoint = endPoint;
-    this._drawCurve(this.beginPoint, this.middlePoint, endPoint);
-    this.beginPoint = this.middlePoint;
-    this.middlePoint = endPoint;
+    const endPoint = { x: e.clientX + document.body.scrollLeft, y: e.clientY + document.body.scrollTop } // 鼠标的位置（终点）
+    if (!this.lastTwoPoint) this.lastTwoPoint = [ endPoint, endPoint ];
+    console.log(this.lastTwoPoint);
+    const newEndPoint = { x: (this.lastTwoPoint[1].x + endPoint.x) / 2, y: (this.lastTwoPoint[1].y + endPoint.y) / 2 } // 第二个点和第三个点（终点）的中点，也是新的终点，此时第二个点做控制点
+    this._drawCurve(this.lastTwoPoint[0], this.lastTwoPoint[1], newEndPoint);
+    this.lastTwoPoint[0] = newEndPoint;
+    this.lastTwoPoint[1] = endPoint;
   },
   
   _drawLine: function(beginPoint, endPoint) {    
